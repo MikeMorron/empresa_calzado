@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
@@ -38,22 +37,29 @@
         <h2>Registrar Producción</h2>
         <form action="/register_production" method="POST">
             <label for="employee_id">Empleado:</label>
-            <select name="employee_id" id="employee_id">
-                {% for employee in employees %}
-                    <option value="{{ employee.employee_id }}">{{ employee.name }}</option>
-                {% endfor %}
+            <select name="employee_id" id="employee_id" required>
+                <!-- Opciones para seleccionar un empleado -->
+                <option value="1">Empleado 1</option>
+                <option value="2">Empleado 2</option>
+                <option value="3">Empleado 3</option>
+                <!-- Agrega más opciones según tus empleados registrados en la base de datos -->
             </select><br>
-
+        
             <label for="product_id">Producto:</label>
-            <select name="product_id" id="product_id">
-                <!-- Aquí puedes cargar los productos disponibles desde la base de datos -->
+            <select name="product_id" id="product_id" required>
+                <!-- Opciones para seleccionar un producto -->
+                <option value="1">Producto 1</option>
+                <option value="2">Producto 2</option>
+                <option value="3">Producto 3</option>
+                <!-- Agrega más opciones según tus productos registrados en la base de datos -->
             </select><br>
-
+        
             <label for="package_number">Número de Paquete:</label>
             <input type="number" name="package_number" id="package_number" required><br>
-
+        
             <button type="submit">Registrar Producción</button>
         </form>
+        
     </div>
 </body>
 </html>

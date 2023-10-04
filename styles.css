@@ -45,18 +45,32 @@ th {
     color: white;
 }
 
-/* Botones y formularios */
-button {
-    background-color: #333;
-    color: white;
+/* Estilo base para los botones */
+.button {
+    display: inline-block;
     padding: 10px 20px;
-    border: none;
+    text-align: center;
+    text-decoration: none;
     border-radius: 5px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
 }
 
-button:hover {
+/* Estilo para el estado normal de los botones */
+.button-normal {
+    background-color: #333;
+    color: white;
+}
+
+/* Estilo para el estado hover (cuando el mouse pasa sobre el botón) */
+.button:hover {
     background-color: #555;
+}
+
+/* Estilo para el estado activo (cuando se hace clic en el botón) */
+.button:active {
+    background-color: #222;
 }
 
 /* Estilo para los mensajes de éxito y error */

@@ -4,8 +4,8 @@ from sqlalchemy.orm import sessionmaker
 from models import Employee, Product, Production, Package
 from datetime import datetime
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://usuario:contraseña@servidor/nombre_de_la_base_de_datos'
+app = Flask(shoes)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://TPMike69:Mazzilli1001@TPMike69.mysql.pythonanywhere-services.com/shoes'
 
 # Configurar la base de datos
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
