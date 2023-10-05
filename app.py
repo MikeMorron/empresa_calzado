@@ -1,56 +1,52 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+# Importa las clases de modelos necesarias desde models.py
 from models import Employee, Product, Production, Package
-from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://TPMike69:Mazzilli1001@TPMike69.mysql.pythonanywhere-services.com/shoes'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://TPMike69:Mazzilli1001@localhost/shoes'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = '' 
 
-# Configurar la base de datos
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-Session = sessionmaker(bind=engine)
+db = SQLAlchemy(app)
 
-# Ruta principal para mostrar la lista de empleados
+# Rutas y lógica de la aplicación
 @app.route('/')
 def index():
-    session = Session()
-    employees = session.query(Employee).all()
-    session.close()
-    return render_template('index.html', employees=employees)
+    # Aquí puedes agregar la lógica para mostrar información en tu página de inicio
+    return render_template('index.html')
 
-# Ruta para registrar una producción
+# Define tus otras rutas y lógica aquí
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+# Ruta y lógica para registrar la producción
 @app.route('/register_production', methods=['POST'])
 def register_production():
-    session = Session()
-    
-    # Obtener los datos del formulario
-    employee_id = int(request.form['employee_id'])
-    product_id = int(request.form['product_id'])
-    production_date = datetime.utcnow()
-    package_number = int(request.form['package_number'])
-    
-    # Obtener el empleado y el producto
-    employee = session.query(Employee).filter_by(employee_id=employee_id).first()
-    product = session.query(Product).filter_by(product_id=product_id).first()
-    
-    # Calcular la compensación
-    compensation = employee.compensation_per_product
-    
-    # Crear un registro de producción
-    production = Production(
-        employee_id=employee_id,
-        product_id=product_id,
-        production_date=production_date,
-        package_number=package_number,
-        compensation=compensation
-    )
-    
-    session.add(production)
-    session.commit()
-    
-    session.close()
-    return redirect(url_for('index'))
+    if request.method == 'POST':
+        employee_id = request.form['employee_id']
+        product_id = request.form['product_id']
+        production_date = request.form['production_date']
+        package_number = request.form['package_number']
+        compensation = request.form['compensation']
+
+        # Crea una nueva producción en la base de datos
+        new_production = Production(
+            employee_id=employee_id,
+            product_id=product_id,
+            production_date=production_date,
+            package_number=package_number,
+            compensation=compensation
+        )
+
+        db.session.add(new_production)
+        db.session.commit()
+
+        flash('Producción registrada con éxito', 'success')
+        return redirect(url_for('index'))
+
+# ... define otras rutas y lógica aquí ...
 
 if __name__ == '__main__':
     app.run(debug=True)

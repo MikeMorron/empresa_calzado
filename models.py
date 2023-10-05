@@ -1,53 +1,43 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, Float
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
 
-Base = declarative_base()
+db = SQLAlchemy()
 
-# Modelo para los empleados
-class Employee(Base):
-    empleado = 'employees'
+class Employee(db.Model):
+    __tablename__ = 'employees'
 
-    employee_id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    role = Column(String(100), nullable=False)
-    compensation_per_product = Column(Float, nullable=False)
+    employee_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    role = db.Column(db.String(100), nullable=False)
+    compensation_per_product = db.Column(db.Float, nullable=False)
 
-    # Relación uno a muchos con las producciones del empleado
-    productions = relationship('Production', backref='employee', lazy='dynamic')
+class Product(db.Model):
+    __tablename__ = 'products'
 
-#Modelo para los productos
-class Product(Base):
-    productos = 'products'
+    product_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    # Agrega otros campos de producto que desees incluir
 
-    product_id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
+class Production(db.Model):
+    __tablename__ = 'productions'
 
-    # Relación uno a muchos con las producciones
-    productions = relationship('Production', backref='product', lazy='dynamic')
+    production_id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
+    production_date = db.Column(db.DateTime, nullable=False)
+    package_number = db.Column(db.Integer, nullable=False)
+    compensation = db.Column(db.Float, nullable=False)
 
-# Modelo para las producciones
-class Production(Base):
-    produccion = 'productions'
+    # Definir relaciones
+    employee = db.relationship('Employee', backref=db.backref('productions', lazy=True))
+    product = db.relationship('Product', backref=db.backref('productions', lazy=True))
 
-    production_id = Column(Integer, primary_key=True)
-    employee_id = Column(Integer, ForeignKey('employees.employee_id'), nullable=False)
-    product_id = Column(Integer, ForeignKey('products.product_id'), nullable=False)
-    production_date = Column(DateTime, default=datetime.utcnow, nullable=False)
-    package_number = Column(Integer, nullable=False)
-    compensation = Column(Float, nullable=False)
+class Package(db.Model):
+    __tablename__ = 'packages'
 
-# Modelo para los paquetes
-class Package(Base):
-    paquetes = 'packages'
+    package_id = db.Column(db.Integer, primary_key=True)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
+    package_number = db.Column(db.Integer, nullable=False)
+    total_compensation = db.Column(db.Float, nullable=False)
 
-    package_id = Column(Integer, primary_key=True)
-    employee_id = Column(Integer, ForeignKey('employees.employee_id'), nullable=False)
-    start_date = Column(DateTime, default=datetime.utcnow, nullable=False)
-    end_date = Column(DateTime, nullable=False)
-    total_compensation = Column(Float, nullable=False)
-
-# Configuración de la base de datos
-engine = create_engine('mysql+pymysql://TPMike69:Mazzilli1001@TPMike69.mysql.pythonanywhere-services.com/shoes')
-Base.metadata.create_all(engine)
+    # Definir relaciones
+    employee = db.relationship('Employee', backref=db.backref('packages', lazy=True))
