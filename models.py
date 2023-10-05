@@ -15,7 +15,7 @@ class Product(db.Model):
 
     product_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    # Agrega otros campos de producto que desees incluir
+
 
 class Production(db.Model):
     __tablename__ = 'productions'
@@ -27,7 +27,6 @@ class Production(db.Model):
     package_number = db.Column(db.Integer, nullable=False)
     compensation = db.Column(db.Float, nullable=False)
 
-    # Definir relaciones
     employee = db.relationship('Employee', backref=db.backref('productions', lazy=True))
     product = db.relationship('Product', backref=db.backref('productions', lazy=True))
 
@@ -39,5 +38,4 @@ class Package(db.Model):
     package_number = db.Column(db.Integer, nullable=False)
     total_compensation = db.Column(db.Float, nullable=False)
 
-    # Definir relaciones
     employee = db.relationship('Employee', backref=db.backref('packages', lazy=True))

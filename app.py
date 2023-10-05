@@ -4,19 +4,18 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://TPMike69:Mazzilli1001@localhost/shoes'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'TPMike69.mysql.pythonanywhere-services.com'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = '' 
+app.secret_key = 'Mazzilli1001'
 
 db = SQLAlchemy(app)
 
-# Rutas y lógica de la aplicación
+
 @app.route('/')
 def index():
-    # Aquí puedes agregar la lógica para mostrar información en tu página de inicio
     return render_template('index.html')
 
-# Define tus otras rutas y lógica aquí
+
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -46,7 +45,6 @@ def register_production():
         flash('Producción registrada con éxito', 'success')
         return redirect(url_for('index'))
 
-# ... define otras rutas y lógica aquí ...
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Gestión de Producción</title>
+    <title>Empresa de Calzado</title>
 </head>
 <body>
     <header>
@@ -38,28 +38,29 @@
         <form action="/register_production" method="POST">
             <label for="employee_id">Empleado:</label>
             <select name="employee_id" id="employee_id" required>
-                <!-- Opciones para seleccionar un empleado -->
-                <option value="1">Empleado 1</option>
-                <option value="2">Empleado 2</option>
-                <option value="3">Empleado 3</option>
-                <!-- Agrega más opciones según tus empleados registrados en la base de datos -->
+                <option value="1">Ensamblador </option>
+                <option value="2">Guarnecedor </option>
+                <option value="3">Cortador </option>
             </select><br>
-        
+
             <label for="product_id">Producto:</label>
             <select name="product_id" id="product_id" required>
                 <!-- Opciones para seleccionar un producto -->
-                <option value="1">Producto 1</option>
-                <option value="2">Producto 2</option>
-                <option value="3">Producto 3</option>
-                <!-- Agrega más opciones según tus productos registrados en la base de datos -->
+                <option value="1">Zapatillas</option>
+                <option value="2">Sandalias</option>
+                <option value="3">Babuchas</option>
+                <option value="4">Guaireñas</option>
+                <option value="5">Chancletas</option>
+                <option value="6">Zapatos Sport</option>
+                <option value="7">Tacones</option>
             </select><br>
-        
+
             <label for="package_number">Número de Paquete:</label>
             <input type="number" name="package_number" id="package_number" required><br>
-        
+
             <button type="submit">Registrar Producción</button>
         </form>
-        
+
     </div>
 </body>
 </html>
