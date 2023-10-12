@@ -47,3 +47,4 @@ class Paquete(Base):
     id_usuario = Column(Integer, ForeignKey('Usuario.id_usuario'))
     
     usuario = relationship('Usuario', back_populates='paquetes')
+
