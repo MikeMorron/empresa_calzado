@@ -2,11 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://<usuario>:<contraseña>@<nombre_de_host>/<nombre_de_base_de_datos>'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://MikeMorron:Mazzilli1001@MikeMorron.mysql.pythonanywhere-services.com/my_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = ''
 
-gestion_calzado = SQLAlchemy(app)
+my_db= SQLAlchemy(app)
 
 # Importa las clases de modelos necesarias desde models.py
 from models import Usuario, Produccion, Etiqueta, Articulo, Paquete
@@ -34,8 +34,8 @@ def register_production():
             compensation=compensation
         )
 
-        gestion_calzado.session.add(new_production)
-        gestion_calzado.session.commit()
+        my_db.session.add(new_production)
+        my_db.session.commit()
 
         flash('Producción registrada con éxito', 'success')
         return redirect(url_for('index'))
