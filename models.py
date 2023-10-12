@@ -1,41 +1,49 @@
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine, Column, Integer, String, DateTime, DECIMAL, ForeignKey, Enum
+from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
 
-db = SQLAlchemy()
+Base = declarative_base()
 
-class Employee(db.Model):
-    __tablename__ = 'employees'
+class Usuario(Base):
+    __tablename__ = 'Usuario'
+    id_usuario = Column(Integer, primary_key=True)
+    nombre_usuario = Column(String(255))
+    rol = Column(Enum('Cortador', 'Guarnecedor', 'Encargado de ensamblar'))
+    salario = Column(DECIMAL(10, 2))
+    fecha_contrato = Column(DateTime)
+    
+    produccion = relationship('Produccion', back_populates='usuario')
+    paquetes = relationship('Paquete', back_populates='usuario')
 
-    employee_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(100), nullable=False)
-    compensation_per_product = db.Column(db.Float, nullable=False)
+class Produccion(Base):
+    __tablename__ = 'Produccion'
+    prod_id = Column(Integer, primary_key=True)
+    cantidadprod = Column(Integer)
+    fecha = Column(DateTime)
+    precio = Column(Integer)
+    id_usuario = Column(Integer, ForeignKey('Usuario.id_usuario'))
+    
+    usuario = relationship('Usuario', back_populates='produccion')
+    
+class Etiqueta(Base):
+    __tablename__ = 'Etiqueta'
+    Id_etiqueta = Column(Integer, primary_key=True)
+    articulo = Column(String(255))
+    fecha = Column(DateTime)
+    precio_art = Column(Integer)
 
-class Product(db.Model):
-    __tablename__ = 'products'
+class Articulo(Base):
+    __tablename__ = 'Articulo'
+    Id_art = Column(Integer, primary_key=True)
+    nombre_art = Column(String(255))
+    cantidad = Column(Integer)
 
-    product_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-
-
-class Production(db.Model):
-    __tablename__ = 'productions'
-
-    production_id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
-    production_date = db.Column(db.DateTime, nullable=False)
-    package_number = db.Column(db.Integer, nullable=False)
-    compensation = db.Column(db.Float, nullable=False)
-
-    employee = db.relationship('Employee', backref=db.backref('productions', lazy=True))
-    product = db.relationship('Product', backref=db.backref('productions', lazy=True))
-
-class Package(db.Model):
-    __tablename__ = 'packages'
-
-    package_id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer, db.ForeignKey('employees.employee_id'), nullable=False)
-    package_number = db.Column(db.Integer, nullable=False)
-    total_compensation = db.Column(db.Float, nullable=False)
-
-    employee = db.relationship('Employee', backref=db.backref('packages', lazy=True))
+class Paquete(Base):
+    __tablename__ = 'Paquete'
+    id_pago = Column(Integer, primary_key=True)
+    fecha = Column(DateTime)
+    cantidad = Column(Integer)
+    periodo_pago = Column(Integer)
+    id_usuario = Column(Integer, ForeignKey('Usuario.id_usuario'))
+    
+    usuario = relationship('Usuario', back_populates='paquetes')
